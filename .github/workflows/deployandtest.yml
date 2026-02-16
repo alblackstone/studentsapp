@@ -6,14 +6,11 @@ name: students-app-ci
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+
 
 jobs:
-  build:
-
+  build_and_test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
@@ -35,3 +32,13 @@ jobs:
             npm audit fix --force
     - name: test
       run: npm test
+  deploy: 
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Render
+        uses: JorgeLNJunior/render-deploy@v1.5.0
+        with:
+         service_id: ${{ secrets.RENDER_SERVICE_ID }}
+         api_key: ${{ secrets.RENDER_API_KEY }}
+         wait_deploy: true
