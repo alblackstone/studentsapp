@@ -30,7 +30,8 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: fix vulnerabilities
-      run: npm audit fix --force
-      run: npm audit fix --force
+      run: |
+            npm audit fix --force
+            npm audit fix --force
     - name: test
       run: npm test
